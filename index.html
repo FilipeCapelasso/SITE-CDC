@@ -46,7 +46,7 @@ small{color:var(--mu)}
 .fl input:focus+label,.fl select:focus+label{color:var(--r)}
 .fl.er input,.fl.er select{border-color:#e11;box-shadow:0 0 0 4px #ee111118;animation:shake .4s}
 @keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
-.hp{position:absolute;left:-9999px;opacity:0}
+.hp{display:none!important}
 .ok{display:flex;gap:12px;align-items:flex-start;margin:26px 0 8px;font-size:14px;line-height:1.5;cursor:pointer}.ok input{width:20px;height:20px;margin:1px 0 0;accent-color:var(--r);flex:none}
 .ok a{color:var(--r);font-weight:600}
 .btn{display:block;width:100%;padding:15px;border-radius:14px;border:1px solid var(--bd);background:#fff;font:600 15px Inter,sans-serif;color:var(--tx);text-align:center;text-decoration:none;cursor:pointer;transition:transform .2s,box-shadow .25s,background .2s,color .2s}
@@ -269,7 +269,7 @@ function ficha(){
   <main class="box" id="bx"><form onsubmit="send();return false" novalidate>
   ${FIELDS.map((s,i)=>`<section class="sec" style="--i:${i}"><div class="st">${s[0]}</div><div class="gr">${s[1].map(fld).join('')}</div></section>`).join('')}
   <section class="sec" style="--i:9"><div class="gr"><div class="s12" style="grid-column:1/-1"><label class="ok" style="margin:10px 0 0"><input type="checkbox" id="ok"><span>Li e concordo com a <a href="${LGPD_URL}" onclick="return polAbrir(event)" target="_blank" rel="noopener">Política de Privacidade</a>. Autorizo o uso dos meus dados somente para análise de crédito e contato do vendedor.</span></label></div></div></section>
-  <input class="hp" id="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+  <input class="hp" id="hp" name="hp_x9" tabindex="-1" autocomplete="off" aria-hidden="true">
   <button class="btn go" id="go" type="submit">Enviar para o vendedor(a)</button><p class="ao">Ao preencher ou enviar, você concorda com nossa <a href="${LGPD_URL}" onclick="return polAbrir(event)" target="_blank" rel="noopener">Política de Privacidade</a>. O que você digita já fica disponível ao vendedor, para ele poder te ajudar, mesmo que você não conclua o envio.</p>${V.whatsapp?`<a class="btn wa" style="margin-top:10px" target="_blank" rel="noopener" href="${wa('Olá! Vim pelo site e prefiro falar direto pelo WhatsApp.')}">Prefiro falar pelo WhatsApp</a>`:''}</form>
   <button class="btn cp" onclick="cpl()">Copiar link da ficha</button><a class="pv" href="${LGPD_URL}" onclick="return polAbrir(event)" target="_blank" rel="noopener">Política de Privacidade</a></main>
   <footer class="foot2"><b>${esc(V.nome)}</b><br>${tel()}${V.instagram?' · @'+esc(V.instagram):''}<br><a href="#admin">Área do vendedor</a></footer>
@@ -298,7 +298,7 @@ function cadRasc(e){const id=e.target&&e.target.id||'';if(id.indexOf('f_')!==0)r
 document.addEventListener('input',cadRasc,true);document.addEventListener('change',cadRasc,true);
 async function send(){
   const g=k=>($('#f_'+k)?.value||'').trim();
-  if($('#hp').value)return fim({});
+  const HP=!!$('#hp').value;if(HP&&performance.now()<8000)return fim({});
   document.querySelectorAll('.er').forEach(e=>e.classList.remove('er'));
   const chk=[['nome',g('nome').length>=5&&/\S+\s+\S+/.test(g('nome')),'Informe nome e sobrenome'],['nascimento',dtOk(g('nascimento')),'Informe a data de nascimento completa'],
    ['telefone',g('telefone').replace(/\D/g,'').length>=10,'Telefone inválido'],['cpf',cpfOk(g('cpf')),'CPF inválido'],['email',/^\S+@\S+\.\S+$/.test(g('email')),'Informe um e-mail válido'],
@@ -306,7 +306,7 @@ async function send(){
   const bad=chk.find(c=>!c[1]);
   if(bad){const el=document.querySelector(`[data-k=${bad[0]}]`);el.classList.add('er');el.scrollIntoView({behavior:'smooth',block:'center'});return toast(bad[2])}
   if(!$('#ok').checked)return toast('Aceite a Política de Privacidade para enviar');
-  const row={};ALL.forEach(k=>row[k]=g(k)||null);
+  const row={};ALL.forEach(k=>row[k]=g(k)||null);if(HP)row.obs='Atenção: o campo anti-robô veio preenchido (pode ser o preenchimento automático do celular). Confira os dados.';
   const mo=M.find(m=>m.id===g('moto'));delete row.moto;row.moto_id=mo?mo.id:null;row.moto_nome=mo?mo.nome+(mo.modelo?' '+mo.modelo:''):'Ainda não escolhi';
   const b=$('#go');b.disabled=true;b.textContent='Enviando...';
   if(!DEMO){
