@@ -220,7 +220,7 @@ const FIELDS=[
  ['Sobre a moto',[['entrada','Valor da entrada',4,'rs'],['moto','Moto escolhida',4,'moto'],['habilitacao','Possui habilitação?',4,'hab'],['cor','Cor da moto',6,'cor']]]];
 const FORM=[['nome','📝 Nome e sobrenome',12],['cpf','👤 CPF',6,'cpf'],['nascimento','📆 Data de nascimento',6,'dt'],['telefone','☎️ Telefone do titular',12,'tel']];
 const ALL=FIELDS.flatMap(s=>s[1].map(f=>f[0])),LBL=Object.fromEntries(FIELDS.flatMap(s=>s[1].map(f=>[f[0],f[1]])));
-const REQ=['nome','nascimento','telefone','cpf','moto','habilitacao'];
+const REQ=['nome','nascimento','telefone','email','cpf','moto','habilitacao'];
 const OPC={ocup:['CLT','Autônomo','Servidor público','Empresário / MEI','Aposentado / Pensionista','Estudante','Outro'],hab:['Sim','Não','Em andamento']};
 const AC={nome:'name',telefone:'tel',email:'email',cep:'postal-code',rua:'address-line1',cidade:'address-level2',estado:'address-level1'};
 const STL={novo:'Novo',em_analise:'Em análise',aprovado:'Aprovado',recusado:'Recusado'};
@@ -301,7 +301,7 @@ async function send(){
   if($('#hp').value)return fim({});
   document.querySelectorAll('.er').forEach(e=>e.classList.remove('er'));
   const chk=[['nome',g('nome').length>=5&&/\S+\s+\S+/.test(g('nome')),'Informe nome e sobrenome'],['nascimento',dtOk(g('nascimento')),'Informe a data de nascimento completa'],
-   ['telefone',g('telefone').replace(/\D/g,'').length>=10,'Telefone inválido'],['cpf',cpfOk(g('cpf')),'CPF inválido'],['email',!g('email')||/^\S+@\S+\.\S+$/.test(g('email')),'E-mail inválido'],
+   ['telefone',g('telefone').replace(/\D/g,'').length>=10,'Telefone inválido'],['cpf',cpfOk(g('cpf')),'CPF inválido'],['email',/^\S+@\S+\.\S+$/.test(g('email')),'Informe um e-mail válido'],
    ['moto',!!g('moto'),'Escolha a moto'],['cor',!!g('cor'),'Informe a cor da moto'],['habilitacao',!!g('habilitacao'),'Informe se possui habilitação']];
   const bad=chk.find(c=>!c[1]);
   if(bad){const el=document.querySelector(`[data-k=${bad[0]}]`);el.classList.add('er');el.scrollIntoView({behavior:'smooth',block:'center'});return toast(bad[2])}
