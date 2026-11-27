@@ -235,12 +235,12 @@ const tel=()=>{const n=(V.whatsapp||'').replace(/^55/,'');return n.length>=10?`(
 const av=c=>V.foto_url?`<img class="ava" ${c?`style="${c}"`:''} src="${esc(V.foto_url)}" alt="">`:`<div class="ava">${esc((V.nome||'?')[0])}</div>`;
 
 const FIELDS=[
- ['Dados pessoais',[['nome','Nome completo',8],['nascimento','Data de nascimento',4,'dt'],['cidade_nascimento','Cidade de nascimento',4],['pai','Nome do pai',4],['mae','Nome da mãe',4],['telefone','Telefone',4,'tel'],['email','E-mail',4,'email'],['cpf','CPF',4,'cpf'],['rg','RG',4],['rg_emissao','Data de emissão do RG',4,'dt']]],
+ ['Dados pessoais',[['nome','Nome completo',8],['telefone','Telefone (WhatsApp)',4,'tel'],['nascimento','Data de nascimento',4,'dt'],['cidade_nascimento','Cidade de nascimento',4],['pai','Nome do pai',4],['mae','Nome da mãe',4],['email','E-mail',4,'email'],['cpf','CPF',4,'cpf'],['rg','RG',4],['rg_emissao','Data de emissão do RG',4,'dt']]],
  ['Endereço',[['cep','CEP',4,'cep'],['rua','Rua',6],['numero','Número',2],['bairro','Bairro',6],['cidade','Cidade',4],['estado','Estado',2]]],
  ['Contato de referência',[['ref_nome','Nome',6],['ref_telefone','Telefone',6,'tel']]],
  ['Dados do trabalho',[['ocupacao','Ocupação',6,'ocup'],['renda','Renda mensal',6,'rs']]],
  ['Sobre a moto',[['entrada','Valor da entrada',4,'rs'],['moto','Moto escolhida',4,'moto'],['habilitacao','Possui habilitação?',4,'hab'],['cor','Cor da moto',6,'cor']]]];
-const FORM=[['nome','📝 Nome e sobrenome',12],['cpf','👤 CPF',6,'cpf'],['nascimento','📆 Data de nascimento',6,'dt'],['telefone','☎️ Telefone do titular',12,'tel']];
+const FORM=[['nome','📝 Nome e sobrenome',12],['telefone','☎️ Telefone do titular (WhatsApp)',12,'tel'],['cpf','👤 CPF',6,'cpf'],['nascimento','📆 Data de nascimento',6,'dt']];
 const ALL=FIELDS.flatMap(s=>s[1].map(f=>f[0])),LBL=Object.fromEntries(FIELDS.flatMap(s=>s[1].map(f=>[f[0],f[1]])));
 const REQ=['nome','nascimento','telefone','email','cpf','moto','habilitacao'];
 const OPC={ocup:['CLT','Autônomo','Servidor público','Empresário / MEI','Aposentado / Pensionista','Estudante','Outro'],hab:['Sim','Não','Em andamento']};
